@@ -35,7 +35,7 @@ class _Dots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 70,
       child: Row(
@@ -62,7 +62,7 @@ class _Dot extends StatelessWidget {
       context,
     ).currentPage;
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       width: 14,
       height: 14,
       margin: const EdgeInsets.symmetric(horizontal: 5),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,18 +11,20 @@ class SlideShow extends StatelessWidget {
   final double bulletPrimario;
   final double bulletSecundario;
 
-  SlideShow(
-      {required this.slides,
+  const SlideShow(
+      {Key? key,
+      required this.slides,
       this.puntosArriba = false,
       this.colorPrimario = Colors.blue,
       this.colorSecundario = Colors.grey,
       this.bulletPrimario = 12.0,
-      this.bulletSecundario = 12.0});
+      this.bulletSecundario = 12.0})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => new _SlideshowModel(),
+      create: (_) => _SlideshowModel(),
       child: SafeArea(
         child: Center(child: Builder(
           builder: (BuildContext context) {
@@ -55,9 +59,9 @@ class _CrearEstructuraSlideshow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        if (this.puntosArriba) _Dots(this.slides.length),
-        Expanded(child: _Slides(this.slides)),
-        if (!this.puntosArriba) _Dots(this.slides.length),
+        if (puntosArriba) _Dots(slides.length),
+        Expanded(child: _Slides(slides)),
+        if (!puntosArriba) _Dots(slides.length),
       ],
     );
   }
@@ -67,16 +71,16 @@ class _CrearEstructuraSlideshow extends StatelessWidget {
 class _Dots extends StatelessWidget {
   final int totalSlides;
 
-  _Dots(this.totalSlides);
+  const _Dots(this.totalSlides);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 70,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(this.totalSlides, (i) => _Dot(i)),
+        children: List.generate(totalSlides, (i) => _Dot(i)),
       ),
     );
   }
@@ -90,6 +94,7 @@ class _Dot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ssModel = Provider.of<_SlideshowModel>(context);
+
     double tamano;
     Color color;
 
@@ -116,15 +121,16 @@ class _Dot extends StatelessWidget {
 class _Slides extends StatefulWidget {
   final List<Widget> slides;
 
-  _Slides(this.slides);
+  const _Slides(this.slides);
 
   @override
   __SlidesState createState() => __SlidesState();
 }
 
+//------------------------------------------------------------------------
 class __SlidesState extends State<_Slides> {
 //------------------------ Variables ----------------------------------
-  final pageViewController = new PageController();
+  final PageController pageViewController = PageController();
 
 //------------------------ initState ----------------------------------
   @override
@@ -145,16 +151,14 @@ class __SlidesState extends State<_Slides> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: PageView(
-        controller: pageViewController,
-        // children: <Widget>[
-        //   _Slide( 'assets/svgs/slide-1.svg' ),
-        //   _Slide( 'assets/svgs/slide-2.svg' ),
-        //   _Slide( 'assets/svgs/slide-3.svg' ),
-        // ],
-        children: widget.slides.map((slide) => _Slide(slide)).toList(),
-      ),
+    return PageView(
+      controller: pageViewController,
+      // children: <Widget>[
+      //   _Slide( 'assets/svgs/slide-1.svg' ),
+      //   _Slide( 'assets/svgs/slide-2.svg' ),
+      //   _Slide( 'assets/svgs/slide-3.svg' ),
+      // ],
+      children: widget.slides.map((slide) => _Slide(slide)).toList(),
     );
   }
 }
@@ -163,14 +167,14 @@ class __SlidesState extends State<_Slides> {
 class _Slide extends StatelessWidget {
   final Widget slide;
 
-  _Slide(this.slide);
+  const _Slide(this.slide);
 
   @override
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
         height: double.infinity,
-        padding: EdgeInsets.all(30),
+        padding: const EdgeInsets.all(30),
         child: slide);
   }
 }
@@ -183,21 +187,21 @@ class _SlideshowModel with ChangeNotifier {
   double _bulletPrimario = 12.0;
   double _bulletSecundario = 12.0;
 
-  double get currentPage => this._currentPage;
+  double get currentPage => _currentPage;
 
   set currentPage(double pagina) {
-    this._currentPage = pagina;
+    _currentPage = pagina;
     notifyListeners();
   }
 
-  Color get colorPrimario => this._colorPrimario;
+  Color get colorPrimario => _colorPrimario;
   set colorPrimario(Color color) {
-    this._colorPrimario = color;
+    _colorPrimario = color;
   }
 
-  Color get colorSecundario => this._colorSecundario;
+  Color get colorSecundario => _colorSecundario;
   set colorSecundario(Color color) {
-    this._colorSecundario = color;
+    _colorSecundario = color;
   }
 
   double get bulletPrimario => _bulletPrimario;
